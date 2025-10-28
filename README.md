@@ -18,7 +18,7 @@ This is a popular HTML CSS, and JS library included in this project. To make upd
 
 ## AUTO INSTALL DB
 To create the database you will run the start.php.
-For example: http://localhost/csc540_login/db/start.php
+For example: http://localhost/csc540_login/php/start.php
 
 Notes: be sure to update the username and password on this file to whatever your using.
 
