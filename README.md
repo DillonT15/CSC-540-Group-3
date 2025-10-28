@@ -25,3 +25,6 @@ Notes: be sure to update the username and password on this file to whatever your
 ## UPDATES TO YOUR LOCAL ENVIRONMENT
 start.php - update the connection to your database
 config.php - update the connection to your database
+
+
+Ivory Was Here.
