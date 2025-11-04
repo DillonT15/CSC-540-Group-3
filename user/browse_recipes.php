@@ -43,11 +43,10 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
 
 <!doctype html>
-<!-- Changes to actual HTML page are below -->
 <html lang="en">
 <head>
     <?php include_once (ROOT_PATH . '/include/head.php'); ?>
-    <title>Welcome to Recipe Sharing Platform</title>
+    <title>Browse Recipes | Recipe Sharing Platform</title>
 </head>
 <body class="<?php echo $page_name; ?>">
 
@@ -55,21 +54,26 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
 <main role="main" class="container mt-5">
 
-    <!-- Hero Section -->
-    <div class="jumbotron text-center bg-light p-5 rounded-3 shadow-sm">
-        <h1 class="display-4">Welcome to the Recipe Sharing Platform!</h1>
-        <p class="lead mt-3">Discover, share, and enjoy delicious recipes from our community of food lovers.</p>
-        <?php if (!isset($_SESSION['user_id'])): ?>
-            <a href="../login.php" class="btn btn-primary btn-lg mt-2">Login</a>
-            <a href="../register.php" class="btn btn-success btn-lg mt-2">Register</a>
-        <?php else: ?>
-            <a href="browse_recipes.php" class="btn btn-info btn-lg mt-2">Browse Recipes</a>
-        <?php endif; ?>
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4">Browse Recipes</h1>
+        <p class="lead">Explore all recipes shared by our community members. Click on any recipe to view details and instructions. You can also Create a Recipe:</p>
+            <!-- Placeholder for creating recipe button. Still need to implement creating a recipe below-->
+        <a href="#" class="btn btn-success btn-lg mt-3">Create Recipe</a>
+
+
+
+
+
+
     </div>
-    <div class="mt-5 text-center">
-        <h2>About Us</h2>
-        <p class="lead">Our platform connects food enthusiasts, allowing them to share culinary creations and discover new flavors from around the world.</p>
-    </div>
+            <!-- All Recipes will be listed below here -->
+
+
+
+
+
+
 
 </main>
 
