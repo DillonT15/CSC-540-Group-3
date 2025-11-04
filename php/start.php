@@ -165,15 +165,16 @@ $create_recipes->close();
 $create_tag_names = $db_connection->prepare(
     "CREATE OR REPLACE TABLE Tag_Names(
         tag_id INT NOT NULL AUTO_INCREMENT,
-        tag_name VARCHAR(255),
-        PRIMARY KEY(tag_id)
+        tag_name VARCHAR(255) NOT NULL,
+        PRIMARY KEY(tag_id),
+        UNIQUE(tag_name)
     );");
 $create_tag_names->execute();
 $create_tag_names->close();
 /* TAGS */
 $create_tags = $db_connection->prepare(
     "CREATE OR REPLACE TABLE Tags(
-        tag_id INT NOT NULL AUTO_INCREMENT,
+        tag_id INT NOT NULL,
         recipe_id INT NOT NULL,
         PRIMARY KEY(tag_id, recipe_id),
         FOREIGN KEY(tag_id) REFERENCES Tag_Names(tag_id),

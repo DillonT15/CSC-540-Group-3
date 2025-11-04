@@ -51,9 +51,9 @@ if (isset($_POST['submit'])) {
 
 
         if ($_SESSION['user_role'] == 1) {
-          header("location: " . BASE_URL . "/admin");
+          header("location: " . BASE_URL . "/admin"); #Brings admin to the index which shows all accounts
         } elseif ($_SESSION['user_role'] == 2) {
-          header("location:" . BASE_URL . "/user");
+          header("location:" . BASE_URL . "/user"); #Brings user to the index which is their "dashboard"
         } elseif ($_SESSION['user_role'] == 3) {
           header("location:" . BASE_URL . "/guest");
         } else {

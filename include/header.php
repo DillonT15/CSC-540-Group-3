@@ -26,22 +26,33 @@ if (!isset($_SESSION)) {
             echo '</li>';
           }
         ?>
+
         <?php
-          /* User Information */
+          /* This is for Admins header (user_role = 1) */
           if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 1) { // Only display when user is logged in
             echo '<li class="nav-item"><a class="nav-link" href="index.php">Admin Dashboard</a></li>';
-            echo '<li class="nav-item"><a class="nav-link" href="#">New Page</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="browse_recipes.php">Browse Recipes</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>';
           }
         ?>
         <?php
-          /* User Information */
+
+
+          /* This is for Users header (user_role = 2) */
           if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 2) { // Only display when user is logged in
-            echo '<li class="nav-item"><a class="nav-link" href="index.php">User Dashboard</a></li>';
-            echo '<li class="nav-item"><a class="nav-link" href="#">New Page</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="index.php">Dashboard</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="account.php">Account Information</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="browse_recipes.php">Browse Recipes</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>';
+
           }
         ?>
         <?php
-          /* User Information */
+
+
+
+
+          /* This is for Guests header (user_role = 3)*/
           if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 3) { // Only display when user is logged in
             echo '<li class="nav-item"><a class="nav-link" href="index.php">Guest Dashboard</a></li>';
             echo '<li class="nav-item"><a class="nav-link" href="#">New Page</a></li>';
