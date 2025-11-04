@@ -1,30 +1,19 @@
-# CSC540 Login
-A basic database web application that just focuses on a simple login. This is a starting point for building a web application using mariaDB on XAMPP.
+## INSTRUCTIONS TO RUN PROJECT
+1. Always run "git pull" to obtain latest version
+2. Start XAMMP, run Apache and MySQL.
+3. Type http://localhost/csc540_login/php/start.php into browser
+4. Visit http://localhost/csc540_login/
 
-## Stack
-The project was built using [xampp] (https://www.apachefriends.org/index.html)
-XAMPP should be installed locally in order to run this program.
-- Appache
-- MariaDB
-- PHP
-- Pearl
+The default admin is currently "johndoe" password "SCSU2024". Create an account to test User functionality.
 
-## INSTRUCTIONS
-These files must be hosted within a system that supports lamp stacks, preferably install this into a XAMPP and run locally. This project is not built to scale for a production based website, it intention is to be used as a teaching tool.
-
-## BOOTSTRAP
-This is a popular HTML CSS, and JS library included in this project. To make updates simpler and faster, see the documentation for how to use it.
-[bootstrap docs] (https://getbootstrap.com/docs/5.3/getting-started/introduction/)
-
-## AUTO INSTALL DB
-To create the database you will run the start.php.
-For example: http://localhost/csc540_login/php/start.php
-
-Notes: be sure to update the username and password on this file to whatever your using.
-
-## UPDATES TO YOUR LOCAL ENVIRONMENT
-start.php - update the connection to your database
-config.php - update the connection to your database
+## MAKING CHANGES
+When finished making changes, run the following:
+1. git add .
+2. git commit -m "(add any comments here)"
+3. git push origin main OR git push origin (branch)  depending if you are working on a different branch.
 
 
-Ivory Was Here.
+## DATABASE TABLES
+htdocs\csc540_login\php\start.php - This is where the all the tables from ERD are created as well as test accounts
+
+
