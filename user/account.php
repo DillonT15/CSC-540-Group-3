@@ -13,8 +13,41 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
   /* Page Name */
   $page_name = "user";
+  $user_check = $_SESSION['login_user'];
 
+// Fetch user info from database
+$query = "
+    SELECT 
+        u.user_id,
+        c.first_name,
+        c.last_name,
+        c.email,
+        c.phone,
+        c.street_1,
+        c.street_2,
+        c.city,
+        c.state_code,
+        c.post_code,
+        cr.username,
+        r.role_type
+    FROM Users u
+    INNER JOIN Contacts c ON u.contact_id = c.contact_id
+    INNER JOIN Credentials cr ON u.user_id = cr.user_id
+    INNER JOIN Roles r ON u.role_id = r.role_id
+    WHERE cr.username = '$user_check'
+";
+
+$result = $db_connection->query($query);
+
+if ($result && $row = $result->fetch_assoc()) {
+    $user_info = $row;
+} else {
+    die("User not found.");
+}
+
+$db_connection->close();
 ?>
+
 <?php
 //======================================================================
 // ADMIN DASHBOARD PAGE
@@ -43,83 +76,33 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 <html lang="en">
   <head>
   <?php include_once (ROOT_PATH . '/include/head.php'); ?>
+  
   </head>
-  <body class="<?php echo $page_name; ?>">
+ <body class="<?php echo $page_name; ?>">
 
-  <?php include_once (ROOT_PATH . '/include/header.php'); ?>
-    <main role="main" class="container">
+<?php include_once(ROOT_PATH . '/include/header.php'); ?>
 
-    <div class="container text-center">
-  <div class="row align-items-center">
+<main class="container mt-5">
+    <h1>My Account</h1>
+    <p class="lead">View and update your personal information below.</p>
+    <a href="edit_account.php" class="btn btn-primary mt-3">Edit Account</a>
+    <table class="table table-bordered">
+      <tr><th>First Name</th><td><?php echo $user_info['first_name']; ?></td></tr>
+      <tr><th>Last Name</th><td><?php echo $user_info['last_name']; ?></td></tr>
+      <tr><th>Email</th><td><?php echo $user_info['email']; ?></td></tr>
+      <tr><th>Phone</th><td><?php echo $user_info['phone']; ?></td></tr>
+      <tr><th>Street 1</th><td><?php echo $user_info['street_1']; ?></td></tr>
+      <tr><th>Street 2</th><td><?php echo $user_info['street_2']; ?></td></tr>
+      <tr><th>City</th><td><?php echo $user_info['city']; ?></td></tr>
+      <tr><th>State</th><td><?php echo $user_info['state_code']; ?></td></tr>
+      <tr><th>Postal Code</th><td><?php echo $user_info['post_code']; ?></td></tr>
+      <tr><th>Username</th><td><?php echo $user_info['username']; ?></td></tr>
+      <tr><th>Role</th><td><?php echo $user_info['role_type']; ?></td></tr>
+    </table>
+
     
-    <div class="col">
-      <div class="mb-6">
-      <h1>Welcome <?php echo $_SESSION['user_first'] ?></h1>
-      <p class="lead">This is the <?php echo $_SESSION['user_type'] ?> dashboard.</p>
-      <p>Only users with the  role can access this page.</p>
-      </div>
-      <hr class="mb-4">
-      <section class="mb-4">
-      <h2>User Information</h2>
-      <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Email</th>
-      <th scope="col">Username</th>
-      <th scope="col">Role</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php
-      include_once (ROOT_PATH . '/php/config.php');
+</main>
 
-      $result = $db_connection->query(
-        "SELECT 
-            u.user_id,
-            c.first_name,
-            c.last_name,
-            c.email,
-            cr.username,
-            r.role_type
-        FROM Users u
-        INNER JOIN Contacts c ON u.contact_id = c.contact_id
-        INNER JOIN Credentials cr ON u.user_id = cr.user_id
-        INNER JOIN Roles r ON u.role_id = r.role_id
-        WHERE cr.username = '$user_check'
-        ");
-
-      if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-          echo "<tr>";
-          echo "<th scope='row'>" . $row["user_id"] . "</th>";
-          echo "<td>" . htmlspecialchars($row["first_name"]) . "</td>";
-          echo "<td>" . htmlspecialchars($row["last_name"]) . "</td>";
-          echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-          echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
-          echo "<td>" . htmlspecialchars($row["role_type"]) . "</td>";
-          echo "</tr>";
-        }
-      } else {
-        echo "<tr><td colspan='6'>No users found</td></tr>";
-      }
-      $db_connection->close();
-    ?>
-
-  </tbody>
-</table>
-</section>
-      
-    </div>
-    
-  </div>
-</div>  
-       
-    </main>
-    <?php include_once (ROOT_PATH . '/include/footer.php'); ?>
-  </body>
+<?php include_once(ROOT_PATH . '/include/footer.php'); ?>
+</body>
 </html>
-
