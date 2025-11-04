@@ -212,7 +212,7 @@ $create_instructions = $db_connection->prepare(
     "CREATE OR REPLACE TABLE Instructions(
         recipe_id INT NOT NULL,
         step_number INT NOT NULL,
-        instruction_text VARCHAR(255),
+        instruction_text VARCHAR(2000),
         PRIMARY KEY(recipe_id, step_number),
         FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
     );");
@@ -257,6 +257,7 @@ $create_ratings = $db_connection->prepare(
         recipe_id INT NOT NULL,
         rating INT,
         PRIMARY KEY(rating_id),
+        UNIQUE(user_id, recipe_id), /* Unique rating so user doesnt input multiple ratings */
         FOREIGN KEY(user_id) REFERENCES Users(user_id),
         FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
     );");
