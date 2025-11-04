@@ -60,6 +60,8 @@ echo "Table creation started." . nl2br("\r\n");
 /* Below Are Tables That Have Only Primary Keys */
 /* ------------------------------------------ */
 
+
+
 /* Role */
 $create_roles = $db_connection->prepare(
 	"CREATE OR REPLACE TABLE Roles(
@@ -82,7 +84,7 @@ $create_contacts = $db_connection->prepare(
         city varchar(255),
         state_code varchar(255),
         post_code int(5),
-        updated timestamp,
+        updated timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY(contact_id));");
 $create_contacts->execute();
 $create_contacts->close();
@@ -96,8 +98,8 @@ $create_users = $db_connection->prepare(
         user_id int NOT NULL AUTO_INCREMENT,
         role_id int NOT NULL,
         contact_id int NOT NULL,
-	    creation_date timestamp,
-	    PRIMARY KEY(user_id),
+	creation_date timestamp DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(user_id),
         FOREIGN KEY(role_id) REFERENCES Roles(role_id),
         FOREIGN KEY(contact_id) REFERENCES Contacts(contact_id));");
 $create_users->execute();
@@ -106,13 +108,175 @@ $create_users->close();
 /* Credentials */
 $create_credentials = $db_connection->prepare(
 	"CREATE OR REPLACE TABLE Credentials(
+	user_id int NOT NULL,
         username varchar(255) NOT NULL,
-	    user_id int NOT NULL,
         password_salted varchar(255) NOT NULL,
-	    PRIMARY KEY(username),
+	PRIMARY KEY(username),
         FOREIGN KEY(user_id) REFERENCES Users(user_id));");
 $create_credentials->execute();
 $create_credentials->close();
+
+# everything above is mostly unchanged, here's our stuff:
+
+/* USER SETTINGS */
+$create_user_settings = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE User_Settings(
+        user_id INT NOT NULL,
+        background_color VARCHAR(255),
+        font VARCHAR(255),
+        text_size VARCHAR(255),
+        PRIMARY KEY(user_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id)
+    );");
+$create_user_settings->execute();
+$create_user_settings->close();
+
+#next set of tables, for food half of database:
+
+/* CATEGORIES */
+$create_categories = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Categories(
+        category_id INT NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255),
+        PRIMARY KEY(category_id)
+    );");
+$create_categories->execute();
+$create_categories->close();
+
+/* RECIPES */
+$create_recipes = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Recipes(
+        recipe_id INT NOT NULL AUTO_INCREMENT,
+        title VARCHAR(255),
+        category_id INT,
+        description_text VARCHAR(65535),
+        prep_time VARCHAR(255),
+        cook_time VARCHAR(255),
+        user_id INT NOT NULL,
+        PRIMARY KEY(recipe_id),
+        FOREIGN KEY(category_id) REFERENCES Categories(category_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id)
+    );");
+$create_recipes->execute();
+$create_recipes->close();
+
+
+/* TAG NAMES */
+$create_tag_names = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Tag_Names(
+        tag_id INT NOT NULL AUTO_INCREMENT,
+        tag_name VARCHAR(255),
+        PRIMARY KEY(tag_id)
+    );");
+$create_tag_names->execute();
+$create_tag_names->close();
+/* TAGS */
+$create_tags = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Tags(
+        tag_id INT NOT NULL AUTO_INCREMENT,
+        recipe_id INT NOT NULL,
+        PRIMARY KEY(tag_id, recipe_id),
+        FOREIGN KEY(tag_id) REFERENCES Tag_Names(tag_id),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
+    );");
+$create_tags->execute();
+$create_tags->close();
+
+
+/* INGREDIENTS */
+$create_ingredients = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Ingredients(
+        ingredient_id INT NOT NULL AUTO_INCREMENT,
+        ingredient_name VARCHAR(255),
+        PRIMARY KEY(ingredient_id)
+    );");
+$create_ingredients->execute();
+$create_ingredients->close();
+/* INGREDIENTS LISTS */
+$create_ingredients_lists = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Ingredients_Lists(
+        recipe_id INT NOT NULL,
+        ingredient_id INT NOT NULL,
+        amount VARCHAR(255),
+        measuring_unit VARCHAR(255),
+        PRIMARY KEY(recipe_id, ingredient_id),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id),
+        FOREIGN KEY(ingredient_id) REFERENCES Ingredients(ingredient_id)
+    );");
+$create_ingredients_lists->execute();
+$create_ingredients_lists->close();
+
+
+/* INSTRUCTIONS */
+$create_instructions = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Instructions(
+        recipe_id INT NOT NULL,
+        step_number INT NOT NULL,
+        instruction_text VARCHAR(255),
+        PRIMARY KEY(recipe_id, step_number),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
+    );");
+$create_instructions->execute();
+$create_instructions->close();
+
+# onto social aspect of database:
+# Could've been done after recipe tables but this keeps it cleanly separated 
+
+/* COMMENTS */
+$create_comments = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Comments(
+        comment_id INT NOT NULL AUTO_INCREMENT,
+        user_id INT NOT NULL,
+        recipe_id INT NOT NULL,
+        text VARCHAR(65535),
+        created_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY(comment_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
+    );");
+$create_comments->execute();
+$create_comments->close();
+
+/* FAVORITES */
+$create_favorites = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Favorites(
+        user_id INT NOT NULL,
+        recipe_id INT NOT NULL,
+        PRIMARY KEY(user_id, recipe_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
+    );");
+$create_favorites->execute();
+$create_favorites->close();
+
+/* RATINGS */
+$create_ratings = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Ratings(
+        rating_id INT NOT NULL AUTO_INCREMENT,
+        user_id INT NOT NULL,
+        recipe_id INT NOT NULL,
+        rating INT,
+        PRIMARY KEY(rating_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id),
+        FOREIGN KEY(recipe_id) REFERENCES Recipes(recipe_id)
+    );");
+$create_ratings->execute();
+$create_ratings->close();
+
+
+/* FRIENDS */ #previously 'Contacts', renamed to avoid confusion with already-there Contacts table
+$create_friends = $db_connection->prepare(
+    "CREATE OR REPLACE TABLE Friends(
+        user_id INT NOT NULL,
+        friend_user_id INT NOT NULL,
+        created_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY(user_id, friend_user_id),
+        FOREIGN KEY(user_id) REFERENCES Users(user_id),
+        FOREIGN KEY(friend_user_id) REFERENCES Users(user_id)
+    );");
+$create_friends->execute();
+$create_friends->close();
+
 
 /* Status Display */
 echo nl2br("The database tables were successfully created.\r\n");
