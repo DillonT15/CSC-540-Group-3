@@ -1,12 +1,4 @@
-/*
-* Custom Styles for CSC540 Login Project
-* Author: Your Name
-* Date: 2024-06-15
-*/
 
-/* Google Fonts Incorporated */
-/* Additional weights and styles can be added as needed */
-/*
 .roboto-flex {
   font-family: "Roboto Flex", sans-serif;
   font-optical-sizing: auto;
@@ -24,8 +16,7 @@
     "YTFI" 738,
     "YTLC" 514,
     "YTUC" 712;
-} */
-
+} 
 html,
 body {
   font-family: "Roboto Flex", sans-serif;

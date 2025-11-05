@@ -60,7 +60,7 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
         <p class="lead">Explore all recipes shared by our community members. Click on any recipe to view details and instructions. You can also Create a Recipe:</p>
             <!-- Placeholder for creating recipe button. Still need to implement creating a recipe below-->
         <a href="#" class="btn btn-success btn-lg mt-3">Create Recipe</a>
-    
+
 
 
 
