@@ -1,7 +1,8 @@
 <?php
 //======================================================================
-// This is the homepage for User
+// ADMIN DASHBOARD PAGE
 //======================================================================
+
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
@@ -10,9 +11,13 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
   include_once (realpath(dirname(__FILE__, 2).'/php/session.php'));
   include_once (realpath(dirname(__FILE__, 2).'/php/path.php'));
   // Session will be included in header.php
+  
+  /* Check Role */
+  include_once (ROOT_SRC_PATH .'/check_admin.php');
 
   /* Page Name */
-  $page_name = "user";
+  $page_name = "admin";
+
 
 ?>
 <?php
@@ -30,7 +35,7 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
   // Session will be included in header.php
   
   /* Check Role */
-  include_once (ROOT_SRC_PATH .'/check_user.php');
+  include_once (ROOT_SRC_PATH .'/check_admin.php');
 
   $user_check = $_SESSION['login_user'];
   // Check user and get roll session from database
@@ -56,11 +61,14 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
     <!-- Page Header -->
     <div class="text-center mb-5">
-        <h1 class="display-4">Browse Recipes</h1>
-        <p class="lead">Explore all recipes shared by our community members. Click on any recipe to view details and instructions. You can also Create a Recipe:</p>
-            <!-- Placeholder for creating recipe button. Still need to implement creating a recipe below-->
-        <a href="#" class="btn btn-success btn-lg mt-3">Create Recipe</a>
+        <h1 class="display-4">Manage User Recipes</h1>
+        <p class="lead">User Recipes:</p>
 
+
+
+            <!-- Placeholder for editing a users recipe button. This will be placed on each recipe-->
+        <a href="edit_recipe.php" class="btn btn-success btn-lg mt-3">Edit Recipe</a>
+    
 
 
 

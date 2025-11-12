@@ -50,6 +50,7 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
       <th scope="col">Email</th>
       <th scope="col">Username</th>
       <th scope="col">Role</th>
+      <th scope="col">Edit</th>
     </tr>
   </thead>
   <tbody>
@@ -80,6 +81,14 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
           echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
           echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
           echo "<td>" . htmlspecialchars($row["role_type"]) . "</td>";
+          // This is the edit/delete button for users
+          echo "<td>
+            <form method='POST' action='edit_useraccount.php' onsubmit=\"return confirm('Are you sure you want to change this users information?');\">
+                <input type='hidden' name='user_id' value='" . $row["user_id"] . "'>
+                <button type='submit' class='btn btn-danger btn-sm'>Edit</button>
+            </form>
+          </td>";
+
           echo "</tr>";
         }
       } else {

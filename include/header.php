@@ -30,9 +30,10 @@ if (!isset($_SESSION)) {
 
         <?php
           /* This is for Admins header (user_role = 1) */
-          if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 1) { // Only display when user is logged in
+          if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 1) { // Only display when admin is logged in
             echo '<li class="nav-item"><a class="nav-link" href="index.php">Admin Dashboard</a></li>';
-            echo '<li class="nav-item"><a class="nav-link" href="browse_recipes.php">Browse Recipes</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="account.php">Account Information</a></li>';
+            echo '<li class="nav-item"><a class="nav-link" href="manage_recipes.php">Manage Recipes</a></li>';
             echo '<li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>';
           }
         ?>
@@ -50,14 +51,6 @@ if (!isset($_SESSION)) {
         ?>
         <?php
 
-
-
-
-          /* This is for Guests header (user_role = 3)*/
-          if (isset($_SESSION['user_name']) && $_SESSION['user_role'] == 3) { // Only display when user is logged in
-            echo '<li class="nav-item"><a class="nav-link" href="index.php">Guest Dashboard</a></li>';
-            echo '<li class="nav-item"><a class="nav-link" href="#">New Page</a></li>';
-          }
         ?>
       </ul>
       <span class="navbar-text">
