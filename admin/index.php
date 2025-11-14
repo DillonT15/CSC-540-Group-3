@@ -56,20 +56,23 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
   <tbody>
     <?php
       include_once (ROOT_PATH . '/php/config.php');
-
+    $login_user_id = $_SESSION['user_id']; // store admin's own user_id in session
       $result = $db_connection->query(
-        "SELECT 
-            u.user_id,
-            c.first_name,
-            c.last_name,
-            c.email,
-            cr.username,
-            r.role_type
-        FROM Users u
-        INNER JOIN Contacts c ON u.contact_id = c.contact_id
-        INNER JOIN Credentials cr ON u.user_id = cr.user_id
-        INNER JOIN Roles r ON u.role_id = r.role_id
-        ORDER BY u.user_id ASC");
+    "SELECT 
+        u.user_id,
+        c.first_name,
+        c.last_name,
+        c.email,
+        cr.username,
+        r.role_type
+    FROM Users u
+    INNER JOIN Contacts c ON u.contact_id = c.contact_id
+    INNER JOIN Credentials cr ON u.user_id = cr.user_id
+    INNER JOIN Roles r ON u.role_id = r.role_id
+    WHERE u.user_id != $login_user_id
+    ORDER BY u.user_id ASC
+        
+");
 
       if ($result->num_rows > 0) {
         // output data of each row

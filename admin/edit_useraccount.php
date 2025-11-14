@@ -11,7 +11,7 @@ include_once (ROOT_PATH . '/php/config.php');
 
 $user_id = intval($_POST['user_id']);
 
-// Fetch current profile details
+// Fetch the users profile details
 $result = $db_connection->query("
     SELECT
         u.user_id,
