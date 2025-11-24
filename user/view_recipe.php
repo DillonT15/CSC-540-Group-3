@@ -15,7 +15,7 @@ ini_set('display_errors', 0);
 ?>
 <?php
   /* Get database connection */
-  include_once (ROOT_SRC_PATH . '/db_connection.php');
+include_once (ROOT_PATH . '/php/config.php');
 
   /* Get recipe ID from URL */
   $recipe_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -24,6 +24,7 @@ ini_set('display_errors', 0);
     header("Location: browse_recipes.php");
     exit();
   }
+
 
   /* Fetch recipe details */
   $recipe_query = "SELECT 
