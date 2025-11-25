@@ -15,16 +15,41 @@ ini_set('display_errors', 0);
 ?>
 <?php
   /* Get database connection */
-include_once (ROOT_PATH . '/php/config.php');
+  include_once (ROOT_SRC_PATH . '/config.php');
 
   /* Get recipe ID from URL */
   $recipe_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+
+  /* Handle comment submission */
+  $comment_message = '';
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comment_text'])) {
+    if (isset($_SESSION['login_user'])) {
+      $comment_text = $db_connection->real_escape_string($_POST['comment_text']);
+      $user_id = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+      
+      if ($user_id > 0 && !empty($comment_text)) {
+        $insert_comment_query = "INSERT INTO Comments (user_id, recipe_id, text, created_timestamp) 
+                                VALUES ($user_id, $recipe_id, '$comment_text', NOW())";
+        
+        if ($db_connection->query($insert_comment_query)) {
+          $comment_message = '<div class="alert alert-success">Comment posted successfully!</div>';
+          // Refresh page to show new comment
+          header("refresh:1;url=view_recipe.php?id=$recipe_id");
+        } else {
+          $comment_message = '<div class="alert alert-danger">Error posting comment. Please try again.</div>';
+        }
+      } else {
+        $comment_message = '<div class="alert alert-warning">Please enter a comment.</div>';
+      }
+    } else {
+      $comment_message = '<div class="alert alert-info">Please log in to post a comment.</div>';
+    }
+  }
 
   if ($recipe_id == 0) {
     header("Location: browse_recipes.php");
     exit();
   }
-
 
   /* Fetch recipe details */
   $recipe_query = "SELECT 
@@ -228,12 +253,17 @@ include_once (ROOT_PATH . '/php/config.php');
                     <h5 class="mb-0">Add a Comment</h5>
                 </div>
                 <div class="card-body">
-                    <form id="comment-form" method="POST" action="">
-                        <div class="form-group">
-                            <textarea class="form-control" id="comment-text" name="comment_text" rows="3" placeholder="Share your thoughts about this recipe..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Post Comment</button>
-                    </form>
+                    <?php echo $comment_message; ?>
+                    <?php if (isset($_SESSION['login_user'])) { ?>
+                        <form method="POST" action="">
+                            <div class="form-group">
+                                <textarea class="form-control" name="comment_text" rows="3" placeholder="Share your thoughts about this recipe..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                        </form>
+                    <?php } else { ?>
+                        <div class="alert alert-info">Please <a href="login.php">log in</a> to post a comment.</div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
