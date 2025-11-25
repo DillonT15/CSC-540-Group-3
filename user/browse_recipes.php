@@ -68,7 +68,76 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
     </div>
             <!-- All Recipes will be listed below here -->
+<?php
+// Fetch all recipes with related data
+$query = "SELECT 
+    r.recipe_id,
+    r.title,
+    r.description_text,
+    r.prep_time,
+    r.cook_time,
+    c.name as category_name,
+    CONCAT(con.first_name, ' ', con.last_name) as creator_name,
+    AVG(rat.rating) as avg_rating,
+    COUNT(DISTINCT com.comment_id) as comment_count,
+    COUNT(DISTINCT f.user_id) as favorite_count
+FROM Recipes r
+LEFT JOIN Categories c ON r.category_id = c.category_id
+LEFT JOIN Users u ON r.user_id = u.user_id
+LEFT JOIN Contacts con ON u.contact_id = con.contact_id
+LEFT JOIN Ratings rat ON r.recipe_id = rat.recipe_id
+LEFT JOIN Comments com ON r.recipe_id = com.recipe_id
+LEFT JOIN Favorites f ON r.recipe_id = f.recipe_id
+GROUP BY r.recipe_id
+ORDER BY r.recipe_id DESC";
 
+$recipes = $db_connection->query($query);
+
+if ($recipes && $recipes->num_rows > 0) {
+    echo '<div class="row">';
+    
+    while ($recipe = $recipes->fetch_assoc()) {
+        ?>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($recipe['title']); ?></h5>
+                    <p class="card-text">
+                        <small class="text-muted">By <?php echo htmlspecialchars($recipe['creator_name']); ?></small>
+                    </p>
+                    <p class="card-text"><?php echo htmlspecialchars(substr($recipe['description_text'], 0, 100)); ?>...</p>
+                    
+                    <div class="mb-2">
+                        <span class="badge badge-primary"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small>
+                            ⭐ <?php echo number_format($recipe['avg_rating'], 1); ?> | 
+                            💬 <?php echo $recipe['comment_count']; ?> | 
+                            ❤️ <?php echo $recipe['favorite_count']; ?>
+                        </small>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small>
+                            <strong>Prep:</strong> <?php echo htmlspecialchars($recipe['prep_time']); ?> | 
+                            <strong>Cook:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
+                        </small>
+                    </div>
+                    
+                    <a href="view_recipe.php?id=<?php echo $recipe['recipe_id']; ?>" class="btn btn-primary btn-sm">View Recipe</a>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    
+    echo '</div>';
+} else {
+    echo '<div class="alert alert-info">No recipes found. Be the first to create one!</div>';
+}
+?>
 
 
 

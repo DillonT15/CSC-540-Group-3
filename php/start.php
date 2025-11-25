@@ -308,6 +308,30 @@ $insert_role->execute();
 
 $insert_role->close();
 
+/* Categories */
+$insert_category = $db_connection->prepare(
+    "INSERT INTO Categories
+        (category_id, name) VALUES(?,?);");
+$insert_category->bind_param("is", $category_id, $category_name);
+
+$category_id = 1;
+$category_name = "Breakfast";
+$insert_category->execute();
+
+$category_id = 2;
+$category_name = "Lunch";
+$insert_category->execute();
+
+$category_id = 3;
+$category_name = "Dinner";
+$insert_category->execute();
+
+$category_id = 4;
+$category_name = "Dessert";
+$insert_category->execute();
+
+$insert_category->close();
+
 /* Contacts */
 $insert_contacts = $db_connection->prepare(
 	"INSERT INTO Contacts
@@ -405,6 +429,363 @@ $password_salted = crypt("SCSU2026", $salt);
 $insert_credentials->execute();
 
 $insert_credentials->close();
+
+/* Recipes */
+$insert_recipe = $db_connection->prepare(
+    "INSERT INTO Recipes
+        (recipe_id, title, category_id, description_text, prep_time, cook_time, user_id) VALUES(?,?,?,?,?,?,?);");
+$insert_recipe->bind_param("isisssi", $recipe_id, $title, $category_id, $description_text, $prep_time, $cook_time, $user_id);
+
+$recipe_id = 1;
+$title = "Classic Pancakes";
+$category_id = 1;
+$description_text = "Fluffy and delicious pancakes perfect for weekend breakfast. These golden pancakes are easy to make and loved by everyone!";
+$prep_time = "10 minutes";
+$cook_time = "15 minutes";
+$user_id = 1;
+$insert_recipe->execute();
+
+$recipe_id = 2;
+$title = "Spaghetti Carbonara";
+$category_id = 3;
+$description_text = "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper. Simple yet incredibly satisfying.";
+$prep_time = "5 minutes";
+$cook_time = "20 minutes";
+$user_id = 2;
+$insert_recipe->execute();
+
+$recipe_id = 3;
+$title = "Chocolate Chip Cookies";
+$category_id = 4;
+$description_text = "Homemade chocolate chip cookies that are crispy on the outside and chewy on the inside. A timeless favorite!";
+$prep_time = "15 minutes";
+$cook_time = "12 minutes";
+$user_id = 1;
+$insert_recipe->execute();
+
+$insert_recipe->close();
+
+/* Instructions */
+$insert_instruction = $db_connection->prepare(
+    "INSERT INTO Instructions
+        (recipe_id, step_number, instruction_text) VALUES(?,?,?);");
+$insert_instruction->bind_param("iis", $recipe_id, $step_number, $instruction_text);
+
+// Pancake instructions
+$recipe_id = 1;
+$step_number = 1;
+$instruction_text = "In a large bowl, mix together flour, sugar, baking powder, and salt.";
+$insert_instruction->execute();
+
+$step_number = 2;
+$instruction_text = "In another bowl, beat eggs and add milk and melted butter.";
+$insert_instruction->execute();
+
+$step_number = 3;
+$instruction_text = "Pour wet ingredients into dry ingredients and stir until just combined.";
+$insert_instruction->execute();
+
+$step_number = 4;
+$instruction_text = "Heat a griddle over medium heat and pour batter to form pancakes. Cook until bubbles form, then flip.";
+$insert_instruction->execute();
+
+// Carbonara instructions
+$recipe_id = 2;
+$step_number = 1;
+$instruction_text = "Cook spaghetti according to package directions. Reserve 1 cup pasta water.";
+$insert_instruction->execute();
+
+$step_number = 2;
+$instruction_text = "Fry bacon until crispy, then remove from heat.";
+$insert_instruction->execute();
+
+$step_number = 3;
+$instruction_text = "Whisk together eggs and grated Parmesan cheese.";
+$insert_instruction->execute();
+
+$step_number = 4;
+$instruction_text = "Toss hot pasta with bacon, then remove from heat and quickly stir in egg mixture. Add pasta water as needed.";
+$insert_instruction->execute();
+
+// Cookie instructions
+$recipe_id = 3;
+$step_number = 1;
+$instruction_text = "Preheat oven to 375°F. Mix butter and sugars until creamy.";
+$insert_instruction->execute();
+
+$step_number = 2;
+$instruction_text = "Beat in eggs and vanilla extract.";
+$insert_instruction->execute();
+
+$step_number = 3;
+$instruction_text = "Gradually blend in flour, baking soda, and salt. Stir in chocolate chips.";
+$insert_instruction->execute();
+
+$step_number = 4;
+$instruction_text = "Drop rounded tablespoons onto baking sheet. Bake 9-11 minutes until golden brown.";
+$insert_instruction->execute();
+
+$insert_instruction->close();
+
+/* Ingredients */
+$insert_ingredient = $db_connection->prepare(
+    "INSERT INTO Ingredients
+        (ingredient_id, ingredient_name) VALUES(?,?);");
+$insert_ingredient->bind_param("is", $ingredient_id, $ingredient_name);
+
+$ingredient_id = 1;
+$ingredient_name = "All-purpose flour";
+$insert_ingredient->execute();
+
+$ingredient_id = 2;
+$ingredient_name = "Sugar";
+$insert_ingredient->execute();
+
+$ingredient_id = 3;
+$ingredient_name = "Eggs";
+$insert_ingredient->execute();
+
+$ingredient_id = 4;
+$ingredient_name = "Milk";
+$insert_ingredient->execute();
+
+$ingredient_id = 5;
+$ingredient_name = "Butter";
+$insert_ingredient->execute();
+
+$ingredient_id = 6;
+$ingredient_name = "Spaghetti";
+$insert_ingredient->execute();
+
+$ingredient_id = 7;
+$ingredient_name = "Bacon";
+$insert_ingredient->execute();
+
+$ingredient_id = 8;
+$ingredient_name = "Parmesan cheese";
+$insert_ingredient->execute();
+
+$ingredient_id = 9;
+$ingredient_name = "Chocolate chips";
+$insert_ingredient->execute();
+
+$insert_ingredient->close();
+
+/* Ingredients Lists */
+$insert_ingredients_list = $db_connection->prepare(
+    "INSERT INTO Ingredients_Lists
+        (recipe_id, ingredient_id, amount, measuring_unit) VALUES(?,?,?,?);");
+$insert_ingredients_list->bind_param("iiss", $recipe_id, $ingredient_id, $amount, $measuring_unit);
+
+// Pancakes ingredients
+$recipe_id = 1;
+$ingredient_id = 1;
+$amount = "2";
+$measuring_unit = "cups";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 2;
+$amount = "2";
+$measuring_unit = "tablespoons";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 3;
+$amount = "2";
+$measuring_unit = "whole";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 4;
+$amount = "1.5";
+$measuring_unit = "cups";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 5;
+$amount = "3";
+$measuring_unit = "tablespoons";
+$insert_ingredients_list->execute();
+
+// Carbonara ingredients
+$recipe_id = 2;
+$ingredient_id = 6;
+$amount = "400";
+$measuring_unit = "grams";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 7;
+$amount = "200";
+$measuring_unit = "grams";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 3;
+$amount = "3";
+$measuring_unit = "whole";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 8;
+$amount = "100";
+$measuring_unit = "grams";
+$insert_ingredients_list->execute();
+
+// Cookies ingredients
+$recipe_id = 3;
+$ingredient_id = 1;
+$amount = "2.25";
+$measuring_unit = "cups";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 5;
+$amount = "1";
+$measuring_unit = "cup";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 2;
+$amount = "1";
+$measuring_unit = "cup";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 3;
+$amount = "2";
+$measuring_unit = "whole";
+$insert_ingredients_list->execute();
+
+$ingredient_id = 9;
+$amount = "2";
+$measuring_unit = "cups";
+$insert_ingredients_list->execute();
+
+$insert_ingredients_list->close();
+
+/* Ratings */
+$insert_rating = $db_connection->prepare(
+    "INSERT INTO Ratings
+        (user_id, recipe_id, rating) VALUES(?,?,?);");
+$insert_rating->bind_param("iii", $user_id, $recipe_id, $rating);
+
+$user_id = 2;
+$recipe_id = 1;
+$rating = 5;
+$insert_rating->execute();
+
+$user_id = 3;
+$recipe_id = 1;
+$rating = 4;
+$insert_rating->execute();
+
+$user_id = 1;
+$recipe_id = 2;
+$rating = 5;
+$insert_rating->execute();
+
+$user_id = 3;
+$recipe_id = 2;
+$rating = 5;
+$insert_rating->execute();
+
+$user_id = 2;
+$recipe_id = 3;
+$rating = 4;
+$insert_rating->execute();
+
+$insert_rating->close();
+
+/* Comments */
+$insert_comment = $db_connection->prepare(
+    "INSERT INTO Comments
+        (user_id, recipe_id, text) VALUES(?,?,?);");
+$insert_comment->bind_param("iis", $user_id, $recipe_id, $comment_text);
+
+$user_id = 2;
+$recipe_id = 1;
+$comment_text = "These pancakes turned out amazing! My kids loved them!";
+$insert_comment->execute();
+
+$user_id = 1;
+$recipe_id = 2;
+$comment_text = "Best carbonara I've ever made. So creamy!";
+$insert_comment->execute();
+
+$user_id = 3;
+$recipe_id = 3;
+$comment_text = "Perfect cookies for my family gathering!";
+$insert_comment->execute();
+
+$insert_comment->close();
+
+/* Favorites */
+$insert_favorite = $db_connection->prepare(
+    "INSERT INTO Favorites
+        (user_id, recipe_id) VALUES(?,?);");
+$insert_favorite->bind_param("ii", $user_id, $recipe_id);
+
+$user_id = 2;
+$recipe_id = 1;
+$insert_favorite->execute();
+
+$user_id = 1;
+$recipe_id = 2;
+$insert_favorite->execute();
+
+$user_id = 3;
+$recipe_id = 2;
+$insert_favorite->execute();
+
+$user_id = 2;
+$recipe_id = 3;
+$insert_favorite->execute();
+
+$insert_favorite->close();
+
+/* Tag Names */
+$insert_tag_name = $db_connection->prepare(
+    "INSERT INTO Tag_Names
+        (tag_id, tag_name) VALUES(?,?);");
+$insert_tag_name->bind_param("is", $tag_id, $tag_name);
+
+$tag_id = 1;
+$tag_name = "Quick";
+$insert_tag_name->execute();
+
+$tag_id = 2;
+$tag_name = "Easy";
+$insert_tag_name->execute();
+
+$tag_id = 3;
+$tag_name = "Family-Friendly";
+$insert_tag_name->execute();
+
+$tag_id = 4;
+$tag_name = "Italian";
+$insert_tag_name->execute();
+
+$insert_tag_name->close();
+
+/* Tags */
+$insert_tag = $db_connection->prepare(
+    "INSERT INTO Tags
+        (tag_id, recipe_id) VALUES(?,?);");
+$insert_tag->bind_param("ii", $tag_id, $recipe_id);
+
+$tag_id = 2;
+$recipe_id = 1;
+$insert_tag->execute();
+
+$tag_id = 3;
+$recipe_id = 1;
+$insert_tag->execute();
+
+$tag_id = 1;
+$recipe_id = 2;
+$insert_tag->execute();
+
+$tag_id = 4;
+$recipe_id = 2;
+$insert_tag->execute();
+
+$tag_id = 3;
+$recipe_id = 3;
+$insert_tag->execute();
+
+$insert_tag->close();
 
 
 
