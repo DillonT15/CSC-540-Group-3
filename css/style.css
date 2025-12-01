@@ -27,3 +27,11 @@ body {
   padding: 0;
   background-color: #f4f4f4;
 }
+/* This is for the badge text in view_recipes it was too hard to see before */
+.badge {
+    color: #000 !important;
+}
+.badge-info,
+.badge-primary {
+    color: #000 !important;
+}
