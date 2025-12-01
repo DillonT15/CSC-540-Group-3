@@ -1,7 +1,8 @@
 <?php
 //======================================================================
-// EDIT ACCOUNT PAGE
+// ADMIN EDIT ACCOUNT PAGE
 //======================================================================
+//Page for admin to edit account
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 

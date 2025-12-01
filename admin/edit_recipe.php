@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="en">
 <head>
     <?php include_once (ROOT_PATH . '/include/head.php'); ?>
-    <div style="padding-bottom: 50px;"> <!-- Temporary remove once css stylesheet is incorporated!-->
+    <div style="padding-bottom: 50px;"> 
 </head>
 <body class="user">
 <?php include_once (ROOT_PATH . '/include/header.php'); ?>

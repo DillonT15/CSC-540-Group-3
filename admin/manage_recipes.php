@@ -1,8 +1,7 @@
 <?php
 //======================================================================
-// ADMIN DASHBOARD PAGE
+// Manage Recipes for Admin
 //======================================================================
-
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
@@ -11,19 +10,12 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
   include_once (realpath(dirname(__FILE__, 2).'/php/session.php'));
   include_once (realpath(dirname(__FILE__, 2).'/php/path.php'));
   // Session will be included in header.php
-  
-  /* Check Role */
-  include_once (ROOT_SRC_PATH .'/check_admin.php');
 
   /* Page Name */
   $page_name = "admin";
 
-
 ?>
 <?php
-//======================================================================
-// ADMIN DASHBOARD PAGE
-//======================================================================
 
 error_reporting(E_ALL);
 ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
@@ -36,6 +28,28 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
   
   /* Check Role */
   include_once (ROOT_SRC_PATH .'/check_admin.php');
+
+  include_once(ROOT_SRC_PATH . '/config.php'); // ensures $db_connection exists
+
+  //This is for admin recipe deletion
+  if (isset($_GET['delete'])) {
+    $recipe_id = intval($_GET['delete']);
+
+    //Delete dependencies first
+    $db_connection->query("DELETE FROM Ingredients_Lists WHERE recipe_id = $recipe_id");
+    $db_connection->query("DELETE FROM Instructions WHERE recipe_id = $recipe_id");
+    $db_connection->query("DELETE FROM Ratings WHERE recipe_id = $recipe_id");
+    $db_connection->query("DELETE FROM Comments WHERE recipe_id = $recipe_id");
+    $db_connection->query("DELETE FROM Favorites WHERE recipe_id = $recipe_id");
+    $db_connection->query("DELETE FROM Tags WHERE recipe_id = $recipe_id");
+
+    //Finally delete actual recipe
+    $db_connection->query("DELETE FROM Recipes WHERE recipe_id = $recipe_id");
+
+    header("Location: manage_recipes.php");
+    exit();
+}
+
 
   $user_check = $_SESSION['login_user'];
   // Check user and get roll session from database
@@ -61,13 +75,10 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
     <!-- Page Header -->
     <div class="text-center mb-5">
-        <h1 class="display-4">Manage User Recipes</h1>
-        <p class="lead">User Recipes:</p>
-
-
-
-            <!-- Placeholder for editing a users recipe button. This will be placed on each recipe-->
-        <a href="edit_recipe.php" class="btn btn-success btn-lg mt-3">Edit Recipe</a>
+        <h1 class="display-4">Browse Recipes</h1>
+        <p class="lead">Explore all recipes shared by our community members. Click on any recipe to view details and instructions. You can also Create a Recipe:</p>
+    
+        <a href="create_recipe.php" class="btn btn-success btn-lg mt-3">Create Recipe</a>
     
 
 
@@ -75,8 +86,83 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
 
     </div>
-            <!-- All Recipes will be listed below here -->
+<?php
+// Fetch all recipes with related data
+$query = "SELECT 
+    r.recipe_id,
+    r.title,
+    r.description_text,
+    r.prep_time,
+    r.cook_time,
+    c.name as category_name,
+    CONCAT(con.first_name, ' ', con.last_name) as creator_name,
+    AVG(rat.rating) as avg_rating,
+    COUNT(DISTINCT com.comment_id) as comment_count,
+    COUNT(DISTINCT f.user_id) as favorite_count
+FROM Recipes r
+LEFT JOIN Categories c ON r.category_id = c.category_id
+LEFT JOIN Users u ON r.user_id = u.user_id
+LEFT JOIN Contacts con ON u.contact_id = con.contact_id
+LEFT JOIN Ratings rat ON r.recipe_id = rat.recipe_id
+LEFT JOIN Comments com ON r.recipe_id = com.recipe_id
+LEFT JOIN Favorites f ON r.recipe_id = f.recipe_id
+GROUP BY r.recipe_id
+ORDER BY r.recipe_id DESC";
 
+$recipes = $db_connection->query($query);
+
+if ($recipes && $recipes->num_rows > 0) {
+    echo '<div class="row">';
+    
+    while ($recipe = $recipes->fetch_assoc()) {
+        ?>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($recipe['title']); ?></h5>
+                    <p class="card-text">
+                        <small class="text-muted">By <?php echo htmlspecialchars($recipe['creator_name']); ?></small>
+                    </p>
+                    <p class="card-text"><?php echo htmlspecialchars(substr($recipe['description_text'], 0, 100)); ?>...</p>
+                    
+                    <div class="mb-2">
+                        <span class="badge badge-primary"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small>
+                            ⭐ <?php echo number_format($recipe['avg_rating'], 1); ?> | 
+                            💬 <?php echo $recipe['comment_count']; ?> | 
+                            ❤️ <?php echo $recipe['favorite_count']; ?>
+                        </small>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <small>
+                            <strong>Prep:</strong> <?php echo htmlspecialchars($recipe['prep_time']); ?> | 
+                            <strong>Cook:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
+                        </small>
+                    </div>
+                    
+                    <a href="view_recipe.php?id=<?php echo $recipe['recipe_id']; ?>" class="btn btn-primary btn-sm">View Recipe</a>
+                  
+                   <a href="manage_recipes.php?delete=<?php echo $recipe['recipe_id']; ?>" 
+                    class="btn btn-sm btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this recipe?');">
+                    Delete Recipe
+                  </a>
+
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    
+    echo '</div>';
+} else {
+    echo '<div class="alert alert-info">No recipes found. Be the first to create one!</div>';
+}
+?>
 
 
 
