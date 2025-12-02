@@ -211,6 +211,25 @@ if (isset($_SESSION['login_user'])) {
         }
 
         /* Hero Section */
+        <?php
+// Determine image based on recipe title
+$recipe_title_lower = strtolower($recipe['title']);
+$hero_image = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600'; // default
+
+if (strpos($recipe_title_lower, 'pancake') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=1600';
+} elseif (strpos($recipe_title_lower, 'cookie') !== false || strpos($recipe_title_lower, 'chocolate chip') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1600';
+} elseif (strpos($recipe_title_lower, 'carbonara') !== false || strpos($recipe_title_lower, 'pasta') !== false || strpos($recipe_title_lower, 'spaghetti') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=1600';
+} elseif (strpos($recipe_title_lower, 'cake') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=1600';
+} elseif (strpos($recipe_title_lower, 'salad') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1600';
+} elseif (strpos($recipe_title_lower, 'pizza') !== false) {
+    $hero_image = 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1600';
+}
+?>
         .recipe-hero {
             position: relative;
             height: 500px;
