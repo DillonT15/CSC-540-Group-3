@@ -47,6 +47,40 @@ ini_set('display_errors', 0);
   }
 
   if ($recipe_id == 0) {
+    /* Handle rating submission */
+$rating_message = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
+  if (isset($_SESSION['login_user'])) {
+    $rating_value = intval($_POST['rating']);
+    $user_id = isset($_SESSION['user_id']) ? intval($_SESSION['user_id']) : 0;
+    
+    if ($user_id > 0 && $rating_value >= 1 && $rating_value <= 5) {
+      // Check if user already rated this recipe
+      $check_rating = "SELECT rating_id FROM Ratings WHERE user_id = $user_id AND recipe_id = $recipe_id";
+      $check_result = $db_connection->query($check_rating);
+      
+      if ($check_result->num_rows > 0) {
+        // Update existing rating
+        $update_rating = "UPDATE Ratings SET rating = $rating_value WHERE user_id = $user_id AND recipe_id = $recipe_id";
+        if ($db_connection->query($update_rating)) {
+          $rating_message = '<div class="alert alert-success">Rating updated successfully!</div>';
+          header("refresh:1;url=view_recipe.php?id=$recipe_id");
+        }
+      } else {
+        // Insert new rating
+        $insert_rating = "INSERT INTO Ratings (user_id, recipe_id, rating) VALUES ($user_id, $recipe_id, $rating_value)";
+        if ($db_connection->query($insert_rating)) {
+          $rating_message = '<div class="alert alert-success">Rating submitted successfully!</div>';
+          header("refresh:1;url=view_recipe.php?id=$recipe_id");
+        }
+      }
+    } else {
+      $rating_message = '<div class="alert alert-warning">Please select a valid rating (1-5 stars).</div>';
+    }
+  } else {
+    $rating_message = '<div class="alert alert-info">Please log in to rate this recipe.</div>';
+  }
+}
     header("Location: browse_recipes.php");
     exit();
   }
@@ -158,7 +192,7 @@ $tags_result = $db_connection->query($tags_query);
                 <?php 
                     if ($tags_result && $tags_result->num_rows > 0) {
                         while ($tag = $tags_result->fetch_assoc()) {
-                            echo '<span class="badge badge-secondary">' . htmlspecialchars($tag['tag_name']) . '</span> ';
+                            echo '<span class="badge badge-secondary" style="color: black; background-color: #e0e0e0;">' . htmlspecialchars($tag['tag_name']) . '</span> ';
                         }
                     }
     ?>
@@ -189,7 +223,47 @@ $tags_result = $db_connection->query($tags_query);
             </div>
         </div>
     </div>
+            <div class="alert alert-info">
+                <strong>⏱️ Prep Time:</strong> <?php echo htmlspecialchars($recipe['prep_time']); ?> | 
+                <strong>🔥 Cook Time:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
+            </div>
+        </div>
+    </div>
 
+    <!-- Rating Section -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Rate This Recipe</h5>
+                </div>
+                <div class="card-body">
+                    <?php echo $rating_message; ?>
+                    <?php if (isset($_SESSION['login_user'])) { ?>
+                        <form method="POST" action="">
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5">★</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">★</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">★</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">★</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">★</label>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-warning">Submit Rating</button>
+                            </div>
+                        </form>
+                    <?php } else { ?>
+                        <div class="alert alert-info">Please <a href="login.php">log in</a> to rate this recipe.</div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <!-- Ingredients Column -->
         <div class="col-md-4">
