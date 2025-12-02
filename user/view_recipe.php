@@ -93,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
       r.description_text,
       r.prep_time,
       r.cook_time,
-      r.image_url,
       c.name as category_name,
       CONCAT(con.first_name, ' ', con.last_name) as creator_name,
       AVG(rat.rating) as avg_rating,
@@ -216,7 +215,7 @@ if (isset($_SESSION['login_user'])) {
             position: relative;
             height: 500px;
             background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
-            url('<?php echo htmlspecialchars($recipe['image_url'] ?? 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600'); ?>') center/cover;
+                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600') center/cover;
             display: flex;
             align-items: flex-end;
             margin-bottom: 60px;
