@@ -203,208 +203,610 @@ if (isset($_SESSION['login_user'])) {
 <head>
     <?php include_once (ROOT_PATH . '/include/head.php'); ?>
     <title><?php echo htmlspecialchars($recipe['title']); ?> | Recipe Sharing Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Lora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+        }
+
+        /* Hero Section */
+        .recipe-hero {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
+                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600') center/cover;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            border-radius: 0 0 40px 40px;
+        }
+
+        .recipe-hero-content {
+            padding: 60px;
+            color: white;
+            width: 100%;
+        }
+
+        .recipe-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .recipe-hero-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb-custom {
+            background: transparent;
+            padding: 20px 0;
+            margin-bottom: 0;
+        }
+
+        .breadcrumb-custom a {
+            color: #FF6B6B;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb-custom a:hover {
+            text-decoration: underline;
+        }
+
+        /* Recipe Info Bar */
+        .recipe-info-bar {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .info-group {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-item .icon {
+            font-size: 24px;
+        }
+
+        .info-item .label {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .info-item .value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Tags */
+        .recipe-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .recipe-tag {
+            background: #f7fafc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Main Content Grid */
+        .recipe-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* Ingredients Card */
+        .ingredients-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .ingredients-card h3 {
+            font-family: 'Lora', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #FF6B6B;
+        }
+
+        .ingredient-item {
+            padding: 16px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 16px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+        }
+
+        .ingredient-item:last-child {
+            border-bottom: none;
+        }
+
+        .ingredient-item::before {
+            content: "✓";
+            color: #48BB78;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        /* Instructions */
+        .instructions-section {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .instructions-section h3 {
+            font-family: 'Lora', serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #FF6B6B;
+        }
+
+        .instruction-step {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .instruction-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .step-text {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #4a5568;
+            padding-top: 8px;
+        }
+
+        /* Rating Section */
+        .rating-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .rating-card h4 {
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        /* Star Rating */
+        .star-rating {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            font-size: 40px;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            color: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input:checked ~ label {
+            color: #FFD700;
+            transform: scale(1.1);
+        }
+
+        /* Favorite Button */
+        .favorite-btn {
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .favorite-btn-active {
+            background: #FF6B6B;
+            color: white;
+        }
+
+        .favorite-btn-active:hover {
+            background: #EE5A52;
+            transform: translateY(-2px);
+        }
+
+        .favorite-btn-inactive {
+            background: white;
+            color: #FF6B6B;
+            border: 2px solid #FF6B6B;
+        }
+
+        .favorite-btn-inactive:hover {
+            background: #FF6B6B;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 60px;
+        }
+
+        .comments-section h3 {
+            font-family: 'Lora', serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 32px;
+        }
+
+        .comment-item {
+            padding: 24px;
+            background: #f7fafc;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .comment-text {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .comment-date {
+            font-size: 14px;
+            color: #a0aec0;
+        }
+
+        .comment-form {
+            background: #f7fafc;
+            padding: 32px;
+            border-radius: 12px;
+            margin-top: 32px;
+        }
+
+        .comment-form h4 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #FF6B6B;
+        }
+
+        .submit-btn {
+            background: #FF6B6B;
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #EE5A52;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .recipe-content {
+                grid-template-columns: 1fr;
+            }
+
+            .ingredients-card {
+                position: static;
+            }
+
+            .recipe-hero h1 {
+                font-size: 36px;
+            }
+
+            .recipe-hero-content {
+                padding: 30px;
+            }
+        }
+    </style>
 </head>
 <body class="<?php echo $page_name; ?>">
 
 <?php include_once (ROOT_PATH . '/include/header.php'); ?>
 
-<main role="main" class="container mt-5">
+<!-- Breadcrumb -->
+<div class="container">
+    <nav class="breadcrumb-custom">
+        <a href="browse_recipes.php">← Back to Recipes</a>
+    </nav>
+</div>
 
-    <!-- Back Button -->
-    <div class="mb-3">
-        <a href="browse_recipes.php" class="btn btn-secondary">← Back to Recipes</a>
-    </div>
-
-    <!-- Recipe Header -->
-    <div class="row mb-5">
-        <div class="col-md-8">
-            <h1><?php echo htmlspecialchars($recipe['title']); ?></h1>
-            <p class="lead"><?php echo htmlspecialchars($recipe['description_text']); ?></p>
-            
-            <div class="mb-4">
-                <span class="badge badge-primary badge-lg"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
-                <span class="badge badge-info">By <?= htmlspecialchars($recipe['creator_name'] ?? ''); ?></span>
-                <!-- Display Tags -->
-                <?php 
-                    if ($tags_result && $tags_result->num_rows > 0) {
-                        while ($tag = $tags_result->fetch_assoc()) {
-                            echo '<span class="badge badge-secondary" style="color: black; background-color: #e0e0e0;">' . htmlspecialchars($tag['tag_name']) . '</span> ';
-                        }
-                    }
-    ?>
+<!-- Recipe Hero -->
+<div class="recipe-hero">
+    <div class="recipe-hero-content">
+        <h1><?php echo htmlspecialchars($recipe['title']); ?></h1>
+        <div class="recipe-hero-meta">
+            <div class="meta-item">
+                By <?php echo htmlspecialchars($recipe['creator_name']); ?>
             </div>
-
-            <div class="mb-4">
-                <div>
-                    <strong>⭐ Rating:</strong> 
-                    <?php 
-                        if ($recipe['avg_rating']) {
-                            echo number_format($recipe['avg_rating'], 1) . " / 5 (" . intval($recipe['rating_count']) . " ratings)";
-                        } else {
-                            echo "No ratings yet";
-                        }
-                    ?>
-                </div>
-                <div>
-                    <strong>💬 Comments:</strong> <?php echo intval($recipe['comment_count']); ?>
-                </div>
-                <div>
-                    <strong>❤️ Favorites:</strong> <?php echo intval($recipe['favorite_count']); ?>
-                </div>
-            </div>
-
-            <div class="alert alert-info">
-                <strong>⏱️ Prep Time:</strong> <?php echo htmlspecialchars($recipe['prep_time']); ?> | 
-                <strong>🔥 Cook Time:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
-            </div>
-        </div>
-<!-- Rating Section -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-warning">
-                    <h5 class="mb-0">Rate This Recipe</h5>
-                </div>
-                <div class="card-body">
-                    <?php echo $rating_message; ?>
-                    <?php if (isset($_SESSION['login_user'])) { ?>
-                        <form method="POST" action="">
-                            <div class="star-rating">
-                                <input type="radio" id="star5" name="rating" value="5" required>
-                                <label for="star5">★</label>
-                                <input type="radio" id="star4" name="rating" value="4">
-                                <label for="star4">★</label>
-                                <input type="radio" id="star3" name="rating" value="3">
-                                <label for="star3">★</label>
-                                <input type="radio" id="star2" name="rating" value="2">
-                                <label for="star2">★</label>
-                                <input type="radio" id="star1" name="rating" value="1">
-                                <label for="star1">★</label>
-                            </div>
-                            <div class="mt-3">
-                                <button type="submit" class="btn btn-warning">Submit Rating</button>
-                            </div>
-                        </form>
-                    <?php } else { ?>
-                        <div class="alert alert-info">Please <a href="login.php">log in</a> to rate this recipe.</div>
-                    <?php } ?>
-                </div>
+            <div class="meta-item">
+                <?php echo htmlspecialchars($recipe['category_name']); ?>
             </div>
         </div>
     </div>
+</div>
 
-        <!-- Favorite Buuton -->
-        <?php if (isset($_SESSION['login_user'])) { ?>
-            <form method="POST" class="mb-4">
-            <input type="hidden" name="toggle_favorite" value="1">
+<main role="main" class="container">
 
-        <?php if ($is_favorited) { ?>
-            <button class="btn btn-danger btn-sm px-3 py-2">Favorited</button>
-        <?php } else { ?>
-            <button class="btn btn-outline-danger btn-sm px-3 py-2">Add to Favorites</button>
-        <?php } ?>
-            </form>
-        <?php } else { ?>
-            <div class="alert alert-info">
-                <a href="login.php">Log in</a> to add this recipe to your favorites.
-            </div>
-        <?php } ?>
-
-    </div>
-
-    <div class="row">
-        <!-- Ingredients Column -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Ingredients</h5>
+    <!-- Recipe Info Bar -->
+    <div class="recipe-info-bar">
+        <div class="info-group">
+            <div class="info-item">
+                <span class="icon">⏱️</span>
+                <div>
+                    <div class="label">Prep Time</div>
+                    <div class="value"><?php echo htmlspecialchars($recipe['prep_time']); ?></div>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
+            </div>
+            <div class="info-item">
+                <span class="icon">🔥</span>
+                <div>
+                    <div class="label">Cook Time</div>
+                    <div class="value"><?php echo htmlspecialchars($recipe['cook_time']); ?></div>
+                </div>
+            </div>
+            <div class="info-item">
+                <span class="icon">⭐</span>
+                <div>
+                    <div class="label">Rating</div>
+                    <div class="value">
                         <?php 
-                            if ($ingredients_result && $ingredients_result->num_rows > 0) {
-                                while ($ingredient = $ingredients_result->fetch_assoc()) {
-                                    echo '<li class="list-group-item">';
-                                    echo htmlspecialchars($ingredient['amount']) . ' ' . htmlspecialchars($ingredient['measuring_unit']) . ' ' . htmlspecialchars($ingredient['ingredient_name']);
-                                    echo '</li>';
-                                }
+                            if ($recipe['avg_rating']) {
+                                echo number_format($recipe['avg_rating'], 1) . " (" . intval($recipe['rating_count']) . ")";
                             } else {
-                                echo '<li class="list-group-item">No ingredients listed</li>';
+                                echo "No ratings";
                             }
                         ?>
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Instructions Column -->
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Instructions</h5>
-                </div>
-                <div class="card-body">
-                    <?php 
-                        if ($instructions_result && $instructions_result->num_rows > 0) {
-                            while ($instruction = $instructions_result->fetch_assoc()) {
-                                echo '<div class="mb-3">';
-                                echo '<h6><strong>Step ' . intval($instruction['step_number']) . '</strong></h6>';
-                                echo '<p>' . htmlspecialchars($instruction['instruction_text']) . '</p>';
-                                echo '</div>';
-                            }
-                        } else {
-                            echo '<p>No instructions available</p>';
-                        }
-                    ?>
-                </div>
-            </div>
-        </div>
+        
+        <!-- Favorite Button -->
+        <?php if (isset($_SESSION['login_user'])) { ?>
+            <form method="POST" style="margin: 0;">
+                <input type="hidden" name="toggle_favorite" value="1">
+                <button class="favorite-btn <?php echo $is_favorited ? 'favorite-btn-active' : 'favorite-btn-inactive'; ?>">
+                    <span><?php echo $is_favorited ? '❤️' : '🤍'; ?></span>
+                    <?php echo $is_favorited ? 'Favorited' : 'Add to Favorites'; ?>
+                </button>
+            </form>
+        <?php } ?>
     </div>
 
-    <hr class="my-5">
+    <!-- Description -->
+    <div style="background: white; padding: 32px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); margin-bottom: 40px;">
+        <p style="font-size: 18px; line-height: 1.8; color: #4a5568; margin: 0;">
+            <?php echo htmlspecialchars($recipe['description_text']); ?>
+        </p>
+    </div>
 
-    <!-- Comments Section -->
-    <div class="row">
-        <div class="col-md-8">
-            <h3>Comments (<span id="comment-count"><?php echo intval($recipe['comment_count']); ?></span>)</h3>
+    <!-- Tags -->
+    <?php if ($tags_result && $tags_result->num_rows > 0) { ?>
+        <div class="recipe-tags">
+            <?php while ($tag = $tags_result->fetch_assoc()) { ?>
+                <span class="recipe-tag"><?php echo htmlspecialchars($tag['tag_name']); ?></span>
+            <?php } ?>
+        </div>
+    <?php } ?>
 
+    <!-- Main Content: Ingredients + Instructions -->
+    <div class="recipe-content">
+        <!-- Ingredients -->
+        <div class="ingredients-card">
+            <h3>Ingredients</h3>
+            <div>
+                <?php 
+                    if ($ingredients_result && $ingredients_result->num_rows > 0) {
+                        while ($ingredient = $ingredients_result->fetch_assoc()) {
+                            echo '<div class="ingredient-item">';
+                            echo htmlspecialchars($ingredient['amount']) . ' ' . 
+                                 htmlspecialchars($ingredient['measuring_unit']) . ' ' . 
+                                 htmlspecialchars($ingredient['ingredient_name']);
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<div class="ingredient-item">No ingredients listed</div>';
+                    }
+                ?>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions-section">
+            <h3>Instructions</h3>
             <?php 
-                if ($comments_result && $comments_result->num_rows > 0) {
-                    while ($comment = $comments_result->fetch_assoc()) {
-                        ?>
-                        <div class="card mb-3">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($comment['commenter_name']); ?></h6>
-                                <p class="card-text"><?php echo htmlspecialchars($comment['text']); ?></p>
-                                <small class="text-muted"><?php echo date('M d, Y h:i A', strtotime($comment['created_timestamp'])); ?></small>
-                            </div>
-                        </div>
-                        <?php
+                if ($instructions_result && $instructions_result->num_rows > 0) {
+                    while ($instruction = $instructions_result->fetch_assoc()) {
+                        echo '<div class="instruction-step">';
+                        echo '<div class="step-number">' . intval($instruction['step_number']) . '</div>';
+                        echo '<div class="step-text">' . htmlspecialchars($instruction['instruction_text']) . '</div>';
+                        echo '</div>';
                     }
                 } else {
-                    echo '<div class="alert alert-info">No comments yet. Be the first to comment!</div>';
+                    echo '<p>No instructions available</p>';
                 }
             ?>
+        </div>
+    </div>
 
-            <!-- Add Comment Form -->
-            <div class="card mt-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Add a Comment</h5>
+    <!-- Rating Card -->
+    <div class="rating-card">
+        <h4>Rate This Recipe</h4>
+        <?php echo $rating_message; ?>
+        <?php if (isset($_SESSION['login_user'])) { ?>
+            <form method="POST" action="">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" required>
+                    <label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">★</label>
                 </div>
-                <div class="card-body">
-                    <?php echo $comment_message; ?>
-                    <?php if (isset($_SESSION['login_user'])) { ?>
-                        <form method="POST" action="">
-                            <div class="form-group">
-                                <textarea class="form-control" name="comment_text" rows="3" placeholder="Share your thoughts about this recipe..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Post Comment</button>
-                        </form>
-                    <?php } else { ?>
-                        <div class="alert alert-info">Please <a href="login.php">log in</a> to post a comment.</div>
-                    <?php } ?>
-                </div>
-            </div>
+                <button type="submit" class="submit-btn" style="margin-left: 20px;">Submit Rating</button>
+            </form>
+        <?php } else { ?>
+            <p style="color: #718096;">Please <a href="login.php" style="color: #FF6B6B; font-weight: 600;">log in</a> to rate this recipe.</p>
+        <?php } ?>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+        <h3>Comments (<?php echo intval($recipe['comment_count']); ?>)</h3>
+
+        <?php 
+            if ($comments_result && $comments_result->num_rows > 0) {
+                while ($comment = $comments_result->fetch_assoc()) {
+                    ?>
+                    <div class="comment-item">
+                        <div class="comment-author"><?php echo htmlspecialchars($comment['commenter_name']); ?></div>
+                        <div class="comment-text"><?php echo htmlspecialchars($comment['text']); ?></div>
+                        <div class="comment-date"><?php echo date('M d, Y h:i A', strtotime($comment['created_timestamp'])); ?></div>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo '<p style="color: #718096;">No comments yet. Be the first to comment!</p>';
+            }
+        ?>
+
+        <!-- Comment Form -->
+        <div class="comment-form">
+            <h4>Leave a Comment</h4>
+            <?php echo $comment_message; ?>
+            <?php if (isset($_SESSION['login_user'])) { ?>
+                <form method="POST" action="">
+                    <textarea name="comment_text" placeholder="Share your thoughts about this recipe..." required></textarea>
+                    <button type="submit" class="submit-btn">Post Comment</button>
+                </form>
+            <?php } else { ?>
+                <p style="color: #718096;">Please <a href="login.php" style="color: #FF6B6B; font-weight: 600;">log in</a> to post a comment.</p>
+            <?php } ?>
         </div>
     </div>
 
