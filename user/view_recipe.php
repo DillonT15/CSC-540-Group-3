@@ -51,6 +51,9 @@ ini_set('display_errors', 0);
   }
 
   if ($recipe_id == 0) {
+    header("Location: browse_recipes.php");
+    exit();
+  }
    /* Handle rating submission */
 $rating_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
@@ -91,9 +94,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
     $rating_message = '<div class="alert alert-info">Please log in to rate this recipe.</div>';
   }
 }
-    header("Location: browse_recipes.php");
+/* Redirect after successful submission */
+if (!empty($rating_message) && strpos($rating_message, 'success') !== false) {
+    header("Location: view_recipe.php?id=$recipe_id");
     exit();
-  }
+}
+if (!empty($comment_message) && strpos($comment_message, 'success') !== false) {
+    header("Location: view_recipe.php?id=$recipe_id");
+    exit();
+}
+    
 
   /* Fetch recipe details */
   $recipe_query = "SELECT 
