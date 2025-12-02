@@ -339,7 +339,7 @@ $user_check = $_SESSION['login_user'];
                 <a href="../register.php" class="btn btn-hero-secondary">Sign Up Free</a>
             <?php else: ?>
                 <a href="browse_recipes.php" class="btn btn-hero-primary">Browse Recipes</a>
-                <a href="#" class="btn btn-hero-secondary">Create Recipe</a>
+                <a href="create_recipe.php" class="btn btn-hero-secondary">Create Recipe</a>
             <?php endif; ?>
         </div>
     </div>
@@ -423,7 +423,7 @@ $user_check = $_SESSION['login_user'];
             <a href="browse_recipes.php" class="btn">Explore Recipes</a>
         <?php endif; ?>
     </div>
-    
+
 </main>
 
 <?php include_once (ROOT_PATH . '/include/footer.php'); ?>
