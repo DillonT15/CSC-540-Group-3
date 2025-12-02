@@ -17,6 +17,10 @@ ini_set('display_errors', 0);
   /* Get database connection */
   include_once (ROOT_SRC_PATH . '/config.php');
 
+  /* Initialize message variables */
+    $comment_message = '';
+    $rating_message = '';
+
   /* Get recipe ID from URL */
   $recipe_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
