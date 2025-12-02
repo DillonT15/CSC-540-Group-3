@@ -143,8 +143,8 @@ ini_set('display_errors', 0);
             <p class="lead"><?php echo htmlspecialchars($recipe['description_text']); ?></p>
             
             <div class="mb-4">
-                <span class="badge badge-primary badge-lg"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
-                <span class="badge badge-info">By <?php echo htmlspecialchars($recipe['creator_name']); ?></span>
+                <span class="badge badge-primary badge-lg" style="color: black;"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
+                <span class="badge badge-info" style="color: black;">By <?php echo htmlspecialchars($recipe['creator_name']); ?></span>
             </div>
 
             <div class="mb-4">
