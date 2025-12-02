@@ -215,7 +215,7 @@ if (isset($_SESSION['login_user'])) {
             position: relative;
             height: 500px;
             background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
-                        url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600') center/cover;
+                        url('https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1600') center/cover;
             display: flex;
             align-items: flex-end;
             margin-bottom: 60px;
