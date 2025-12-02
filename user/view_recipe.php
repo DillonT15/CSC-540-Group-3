@@ -223,12 +223,6 @@ $tags_result = $db_connection->query($tags_query);
             </div>
         </div>
     </div>
-            <div class="alert alert-info">
-                <strong>⏱️ Prep Time:</strong> <?php echo htmlspecialchars($recipe['prep_time']); ?> | 
-                <strong>🔥 Cook Time:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
-            </div>
-        </div>
-    </div>
 
     <!-- Rating Section -->
     <div class="row mb-4">
