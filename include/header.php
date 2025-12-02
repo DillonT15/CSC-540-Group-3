@@ -12,7 +12,7 @@ if (!isset($_SESSION)) {
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="../">   
-    <i class="bi bi-claude"></i>  Basic Login</a>
+    <strong> 🍽️ Login </a> </strong>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -34,7 +34,7 @@ if (!isset($_SESSION)) {
             echo '<li class="nav-item"><a class="nav-link" href="index.php">Admin Dashboard</a></li>';
             echo '<li class="nav-item"><a class="nav-link" href="account.php">Account Information</a></li>';
             echo '<li class="nav-item"><a class="nav-link" href="manage_recipes.php">Manage Recipes</a></li>';
-            echo '<li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>';
+            
           }
         ?>
         <?php

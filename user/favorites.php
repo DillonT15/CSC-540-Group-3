@@ -83,6 +83,10 @@ if (!isset($_SESSION['login_user'])) {
                                 <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($recipe['category_name']); ?></h6>
                                 <p class="card-text flex-grow-1"><?= htmlspecialchars(substr($recipe['description_text'], 0, 100)) . '...'; ?></p>
                                 <p class="text-muted mb-2">By <?= htmlspecialchars($recipe['creator_name']); ?></p>
+                                <a href="view_recipe.php?id=<?= $recipe['recipe_id']; ?>" 
+                                    class="btn btn-primary btn-sm w-100 mb-2">
+                                    View Recipe
+                                    </a>
 
                                 <!-- Remove from Favorites Form -->
                                 <form method="POST" class="mt-auto">

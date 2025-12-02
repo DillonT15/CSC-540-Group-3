@@ -51,6 +51,7 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 }
 
 
+
   $user_check = $_SESSION['login_user'];
   // Check user and get roll session from database
 

@@ -225,14 +225,6 @@ if (isset($_SESSION['login_user'])) {
             </div>
         <?php } ?>
 
-
-}
-
-
-
-
-
-
     </div>
 
     <div class="row">

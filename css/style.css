@@ -35,3 +35,7 @@ body {
 .badge-primary {
     color: #000 !important;
 }
+main.container {
+    margin-bottom: 60px !important;
+    padding-bottom: 40px !important;
+}

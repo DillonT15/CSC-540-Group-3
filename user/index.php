@@ -1,53 +1,24 @@
 <?php
 //======================================================================
-// This is the homepage for User
+// User Home Page
 //======================================================================
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
+ini_set('display_errors', 0);
 
-  /* Quick Paths */
-  /* note the 2 after __FILE__, because it's 2 directories deep */
-  include_once (realpath(dirname(__FILE__, 2).'/php/session.php'));
-  include_once (realpath(dirname(__FILE__, 2).'/php/path.php'));
-  // Session will be included in header.php
+include_once(realpath(dirname(__FILE__, 2).'/php/session.php'));
+include_once(realpath(dirname(__FILE__, 2).'/php/path.php'));
+include_once(ROOT_SRC_PATH.'/check_user.php');
 
-  /* Page Name */
-  $page_name = "user";
+$page_name = "user";
+$user_check = $_SESSION['login_user'];
 
 ?>
-<?php
-//======================================================================
-// ADMIN DASHBOARD PAGE
-//======================================================================
-
-error_reporting(E_ALL);
-ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
-
-  /* Quick Paths */
-  /* note the 2 after __FILE__, because it's 2 directories deep */
-  include_once (realpath(dirname(__FILE__, 2).'/php/session.php'));
-  include_once (realpath(dirname(__FILE__, 2).'/php/path.php'));
-  // Session will be included in header.php
-  
-  /* Check Role */
-  include_once (ROOT_SRC_PATH .'/check_user.php');
-
-  $user_check = $_SESSION['login_user'];
-  // Check user and get roll session from database
-
-  /* Page Name */
-  $page_name = "admin";
-?>
-
-
-
 
 <!doctype html>
-<!-- Changes to actual HTML page are below -->
 <html lang="en">
 <head>
     <?php include_once (ROOT_PATH . '/include/head.php'); ?>
-    <title>Welcome to Recipe Sharing Platform</title>
+    <title>Welcome | Recipe Sharing Platform</title>
 </head>
 <body class="<?php echo $page_name; ?>">
 
@@ -57,8 +28,13 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
     <!-- Hero Section -->
     <div class="jumbotron text-center bg-light p-5 rounded-3 shadow-sm">
-        <h1 class="display-4">Welcome to the Recipe Sharing Platform!</h1>
-        <p class="lead mt-3">Discover, share, and enjoy delicious recipes from our community of food lovers.</p>
+        <h1 class="display-4 fw-bold">Welcome to the Recipe Sharing Platform 🍽️</h1>
+
+        <p class="lead mt-3">
+            A community-driven place to explore delicious recipes, save your favorites,
+            and share your own creations with fellow food enthusiasts.
+        </p>
+
         <?php if (!isset($_SESSION['user_id'])): ?>
             <a href="../login.php" class="btn btn-primary btn-lg mt-2">Login</a>
             <a href="../register.php" class="btn btn-success btn-lg mt-2">Register</a>
@@ -66,9 +42,32 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
             <a href="browse_recipes.php" class="btn btn-info btn-lg mt-2">Browse Recipes</a>
         <?php endif; ?>
     </div>
+
+    <!-- About / Features -->
     <div class="mt-5 text-center">
-        <h2>About Us</h2>
-        <p class="lead">Our platform connects food enthusiasts, allowing them to share culinary creations and discover new flavors from around the world.</p>
+        <h2>What You Can Do Here</h2>
+        <p class="lead mb-4">
+            Whether you’re a seasoned chef or just starting out, you’ll find everything you need:
+        </p>
+
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <h4>🔍 Discover</h4>
+                <p>Browse community-posted recipes and find inspiration.</p>
+            </div>
+            <div class="col-md-3">
+                <h4>📤 Share</h4>
+                <p>Upload your own recipes and showcase your cooking skills.</p>
+            </div>
+            <div class="col-md-3">
+                <h4>❤️ Favorite</h4>
+                <p>Save recipes you love for later.</p>
+            </div>
+            <div class="col-md-3">
+                <h4>💬 Comment</h4>
+                <p>Join the discussion and share tips with others.</p>
+            </div>
+        </div>
     </div>
 
 </main>
@@ -77,4 +76,3 @@ ini_set('display_errors', 0); // set to 1 to display errors, 0 to hide them
 
 </body>
 </html>
-
