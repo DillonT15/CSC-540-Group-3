@@ -39,3 +39,26 @@ main.container {
     margin-bottom: 60px !important;
     padding-bottom: 40px !important;
 }
+/* Star Rating Styles */
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  font-size: 2rem;
+  justify-content: flex-end;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  color: #ddd;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+  color: #ffc107;
+}
