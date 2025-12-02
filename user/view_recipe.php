@@ -193,7 +193,7 @@ if (isset($_SESSION['login_user'])) {
                 <?php 
                     if ($tags_result && $tags_result->num_rows > 0) {
                         while ($tag = $tags_result->fetch_assoc()) {
-                            echo '<span class="badge badge-secondary">' . htmlspecialchars($tag['tag_name']) . '</span> ';
+                            echo '<span class="badge badge-secondary" style="color: black; background-color: #e0e0e0;">' . htmlspecialchars($tag['tag_name']) . '</span> ';
                         }
                     }
     ?>
