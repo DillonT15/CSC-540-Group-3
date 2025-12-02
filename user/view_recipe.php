@@ -117,6 +117,41 @@ ini_set('display_errors', 0);
     ORDER BY com.created_timestamp DESC";
 
   $comments_result = $db_connection->query($comments_query);
+
+
+// favorite and unfavorite code
+if (isset($_SESSION['login_user']) && isset($_POST['toggle_favorite'])) { 
+    $user_id = intval($_SESSION['user_id']);
+
+    $check_query = "SELECT * FROM Favorites WHERE user_id = $user_id AND recipe_id = $recipe_id";
+    $check_result = $db_connection->query($check_query);
+
+    if ($check_result->num_rows > 0) {
+        // unfavorite a recipe
+        $delete_query = "DELETE FROM Favorites WHERE user_id = $user_id AND recipe_id = $recipe_id";
+        $db_connection->query($delete_query);
+    } else {
+        // favorite a recipe
+        $insert_query = "INSERT INTO Favorites (user_id, recipe_id) VALUES ($user_id, $recipe_id)";
+        $db_connection->query($insert_query);
+    }
+
+    // reload the page so the button updates
+    header("Location: view_recipe.php?id=$recipe_id");
+    exit();
+}
+
+// check if user has already favorited the recipe
+$is_favorited = false;
+if (isset($_SESSION['login_user'])) {
+    $user_id = intval($_SESSION['user_id']);
+    $fav_query = "SELECT 1 FROM Favorites WHERE user_id = $user_id AND recipe_id = $recipe_id";
+    $fav_result = $db_connection->query($fav_query);
+    $is_favorited = ($fav_result->num_rows > 0);
+}
+
+
+
 ?>
 
 <!doctype html>
@@ -171,6 +206,33 @@ ini_set('display_errors', 0);
                 <strong>🔥 Cook Time:</strong> <?php echo htmlspecialchars($recipe['cook_time']); ?>
             </div>
         </div>
+
+
+        <!-- Favorite Buuton -->
+        <?php if (isset($_SESSION['login_user'])) { ?>
+            <form method="POST" class="mb-4">
+            <input type="hidden" name="toggle_favorite" value="1">
+
+        <?php if ($is_favorited) { ?>
+            <button class="btn btn-danger btn-sm px-3 py-2">Favorited</button>
+        <?php } else { ?>
+            <button class="btn btn-outline-danger btn-sm px-3 py-2">Add to Favorites</button>
+        <?php } ?>
+            </form>
+        <?php } else { ?>
+            <div class="alert alert-info">
+                <a href="login.php">Log in</a> to add this recipe to your favorites.
+            </div>
+        <?php } ?>
+
+
+}
+
+
+
+
+
+
     </div>
 
     <div class="row">
