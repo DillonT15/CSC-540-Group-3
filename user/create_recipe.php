@@ -105,6 +105,41 @@ if (isset($_POST['final_submit'])) {
     $stmt_recipe->execute();
     $recipe_id = $stmt_recipe->insert_id;
     $stmt_recipe->close();
+    // Insert tags (comma-separated)
+$tags = explode(',', $data['tags']);
+
+foreach ($tags as $tag_name) {
+    $tag_name = trim($tag_name);
+    if ($tag_name === '') continue;
+
+    // Check if tag exists
+    $checkTag = $db_connection->prepare(
+        "SELECT tag_id FROM Tag_Names WHERE LOWER(tag_name)=LOWER(?)"
+    );
+    $checkTag->bind_param("s", $tag_name);
+    $checkTag->execute();
+    $checkTag->bind_result($tag_id);
+    $exists = $checkTag->fetch();
+    $checkTag->close();
+
+    if (!$exists) {
+        $insTag = $db_connection->prepare(
+            "INSERT INTO Tag_Names (tag_name) VALUES (?)"
+        );
+        $insTag->bind_param("s", $tag_name);
+        $insTag->execute();
+        $tag_id = $insTag->insert_id;
+        $insTag->close();
+    }
+
+    // insert into join table
+    $insLink = $db_connection->prepare(
+        "INSERT INTO Tags (recipe_id, tag_id) VALUES (?,?)"
+    );
+    $insLink->bind_param("ii", $recipe_id, $tag_id);
+    $insLink->execute();
+    $insLink->close();
+}
 
     foreach ($data['ingredients'] as $ing) {
         $ing_stmt = $db_connection->prepare("SELECT ingredient_id FROM Ingredients WHERE ingredient_name=?");
