@@ -82,6 +82,15 @@ ini_set('display_errors', 0);
     exit();
   }
 
+  /* Fetch tags */
+$tags_query = "SELECT 
+    tn.tag_name
+  FROM Tags t
+  JOIN Tag_Names tn ON t.tag_id = tn.tag_id
+  WHERE t.recipe_id = $recipe_id";
+
+$tags_result = $db_connection->query($tags_query);
+
   /* Fetch ingredients */
   $ingredients_query = "SELECT 
       il.amount,
@@ -145,6 +154,14 @@ ini_set('display_errors', 0);
             <div class="mb-4">
                 <span class="badge badge-primary badge-lg" style="color: black;"><?php echo htmlspecialchars($recipe['category_name']); ?></span>
                 <span class="badge badge-info" style="color: black;">By <?php echo htmlspecialchars($recipe['creator_name']); ?></span>
+                <!-- Display Tags -->
+                <?php 
+                    if ($tags_result && $tags_result->num_rows > 0) {
+                        while ($tag = $tags_result->fetch_assoc()) {
+                            echo '<span class="badge badge-secondary">' . htmlspecialchars($tag['tag_name']) . '</span> ';
+                        }
+                    }
+    ?>
             </div>
 
             <div class="mb-4">
