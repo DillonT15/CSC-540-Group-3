@@ -115,7 +115,7 @@ if (!empty($comment_message) && strpos($comment_message, 'success') !== false) {
       c.name as category_name,
       CONCAT(con.first_name, ' ', con.last_name) as creator_name,
       AVG(rat.rating) as avg_rating,
-      COUNT(rat.rating_id) as rating_count,
+      COUNT(DISTINCT rat.rating_id) as rating_count,
       COUNT(DISTINCT com.comment_id) as comment_count,
       COUNT(DISTINCT f.user_id) as favorite_count
     FROM Recipes r
