@@ -51,7 +51,7 @@ ini_set('display_errors', 0);
   }
 
   if ($recipe_id == 0) {
-    /* Handle rating submission */
+   /* Handle rating submission */
 $rating_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
   if (isset($_SESSION['login_user'])) {
@@ -63,19 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating'])) {
       $check_rating = "SELECT rating_id FROM Ratings WHERE user_id = $user_id AND recipe_id = $recipe_id";
       $check_result = $db_connection->query($check_rating);
       
-      if ($check_result->num_rows > 0) {
+      if ($check_result && $check_result->num_rows > 0) {
         // Update existing rating
         $update_rating = "UPDATE Ratings SET rating = $rating_value WHERE user_id = $user_id AND recipe_id = $recipe_id";
         if ($db_connection->query($update_rating)) {
           $rating_message = '<div class="alert alert-success">Rating updated successfully!</div>';
-          header("refresh:1;url=view_recipe.php?id=$recipe_id");
+          // Remove the header redirect and let the page reload naturally
+          echo '<meta http-equiv="refresh" content="2;url=view_recipe.php?id='.$recipe_id.'">';
+        } else {
+          $rating_message = '<div class="alert alert-danger">Error updating rating: ' . $db_connection->error . '</div>';
         }
       } else {
         // Insert new rating
         $insert_rating = "INSERT INTO Ratings (user_id, recipe_id, rating) VALUES ($user_id, $recipe_id, $rating_value)";
         if ($db_connection->query($insert_rating)) {
           $rating_message = '<div class="alert alert-success">Rating submitted successfully!</div>';
-          header("refresh:1;url=view_recipe.php?id=$recipe_id");
+          // Remove the header redirect and let the page reload naturally
+          echo '<meta http-equiv="refresh" content="2;url=view_recipe.php?id='.$recipe_id.'">';
+        } else {
+          $rating_message = '<div class="alert alert-danger">Error submitting rating: ' . $db_connection->error . '</div>';
         }
       }
     } else {
