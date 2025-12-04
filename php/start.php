@@ -434,8 +434,8 @@ $insert_credentials->close();
 /* Recipes */
 $insert_recipe = $db_connection->prepare(
     "INSERT INTO Recipes
-        (recipe_id, title, category_id, description_text, prep_time, cook_time, user_id) VALUES(?,?,?,?,?,?,?);");
-$insert_recipe->bind_param("isissssi", $recipe_id, $title, $category_id, $description_text, $prep_time, $cook_time, $image_url, $user_id);
+        (recipe_id, title, category_id, description_text, prep_time, cook_time, user_id) VALUES(?,?,?,?,?,?,?,?);");
+$insert_recipe->bind_param("isisssi", $recipe_id, $title, $category_id, $description_text, $prep_time, $cook_time, $image_url, $user_id);
 
 $recipe_id = 1;
 $title = "Classic Pancakes";
