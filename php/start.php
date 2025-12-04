@@ -152,7 +152,7 @@ $create_recipes = $db_connection->prepare(
         description_text VARCHAR(65535),
         prep_time VARCHAR(255),
         cook_time VARCHAR(255),
-        image_url VARCHAR(255),
+        image_url VARCHAR(500),
         user_id INT NOT NULL,
         PRIMARY KEY(recipe_id),
         FOREIGN KEY(category_id) REFERENCES Categories(category_id),
