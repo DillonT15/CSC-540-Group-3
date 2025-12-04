@@ -392,19 +392,19 @@ if (!isset($_SESSION['login_user'])) {
                             <p class="recipe-description"><?= htmlspecialchars($recipe['description_text']); ?></p>
 
                             <div class="recipe-meta">
-                                <?php if ($recipe['prep_time']): ?>
+                                <?php if (isset($recipe['prep_time']) && $recipe['prep_time']): ?>
                                     <div class="meta-item">
                                         <span class="icon">⏱️</span>
                                         <span><?= htmlspecialchars($recipe['prep_time']); ?></span>
                                     </div>
                                 <?php endif; ?>
-                                <?php if ($recipe['avg_rating']): ?>
+                                <?php if (isset($recipe['avg_rating']) && $recipe['avg_rating']): ?>
                                     <div class="meta-item">
                                         <span class="icon">⭐</span>
                                         <span><?= number_format($recipe['avg_rating'], 1); ?></span>
                                     </div>
                                 <?php endif; ?>
-                                <?php if ($recipe['comment_count'] > 0): ?>
+                                <?php if (isset($recipe['comment_count']) && $recipe['comment_count'] > 0): ?>
                                     <div class="meta-item">
                                         <span class="icon">💬</span>
                                         <span><?= intval($recipe['comment_count']); ?></span>
