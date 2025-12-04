@@ -152,6 +152,7 @@ $create_recipes = $db_connection->prepare(
         description_text VARCHAR(65535),
         prep_time VARCHAR(255),
         cook_time VARCHAR(255),
+        image_url VARCHAR(255),
         user_id INT NOT NULL,
         PRIMARY KEY(recipe_id),
         FOREIGN KEY(category_id) REFERENCES Categories(category_id),
@@ -434,7 +435,7 @@ $insert_credentials->close();
 $insert_recipe = $db_connection->prepare(
     "INSERT INTO Recipes
         (recipe_id, title, category_id, description_text, prep_time, cook_time, user_id) VALUES(?,?,?,?,?,?,?);");
-$insert_recipe->bind_param("isisssi", $recipe_id, $title, $category_id, $description_text, $prep_time, $cook_time, $user_id);
+$insert_recipe->bind_param("isisssi", $recipe_id, $title, $category_id, $description_text, $prep_time, $cook_time, $image_url, $user_id);
 
 $recipe_id = 1;
 $title = "Classic Pancakes";
@@ -442,6 +443,7 @@ $category_id = 1;
 $description_text = "Fluffy and delicious pancakes perfect for weekend breakfast. These golden pancakes are easy to make and loved by everyone!";
 $prep_time = "10 minutes";
 $cook_time = "15 minutes";
+$image_url = "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=1600";
 $user_id = 1;
 $insert_recipe->execute();
 
@@ -451,6 +453,7 @@ $category_id = 3;
 $description_text = "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper. Simple yet incredibly satisfying.";
 $prep_time = "5 minutes";
 $cook_time = "20 minutes";
+$image_url = "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=1600";
 $user_id = 2;
 $insert_recipe->execute();
 
@@ -460,6 +463,7 @@ $category_id = 4;
 $description_text = "Homemade chocolate chip cookies that are crispy on the outside and chewy on the inside. A timeless favorite!";
 $prep_time = "15 minutes";
 $cook_time = "12 minutes";
+$image_url = "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1600";
 $user_id = 1;
 $insert_recipe->execute();
 
