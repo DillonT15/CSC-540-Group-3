@@ -476,7 +476,7 @@ $stats = $stats_result->fetch_assoc();
         <div class="action-buttons">
             <a href="edit_account.php" class="btn-primary-custom">✏️ Edit Profile</a>
             <a href="browse_recipes.php" class="btn-secondary-custom">🔍 Browse Recipes</a>
-            <a href="../logout.php" class="btn-danger-custom">🚪 Sign Out</a>
+            
         </div>
 
     </div>
