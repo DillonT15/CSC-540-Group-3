@@ -32,7 +32,7 @@ if (!isset($_SESSION['login_user'])) {
 
     // fetch all recipes favorited by the user
     $favorites_query = "
-        SELECT r.recipe_id, r.title, r.description_text, c.name AS category_name,
+        SELECT r.recipe_id, r.title, r.description_text, r.image_url, c.name AS category_name,
                CONCAT(con.first_name, ' ', con.last_name) AS creator_name
         FROM Favorites f
         JOIN Recipes r ON f.recipe_id = r.recipe_id
